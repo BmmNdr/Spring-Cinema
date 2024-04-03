@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/film.css">
+<title>Film Information</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="film-card">
+        <div class="film-header">
+            <h2 class="film-title" th:text="${film.title}"></h2>
+        </div>
+        <div class="film-details">
+            <p th:text="${film.release_year}"><strong>Release Year:</strong></p>
+            <p th:text="${film.genre}"><strong>Genre:</strong></p>
+        </div>
+        <div class="film-image"><img th:src="'/images/' + ${film.imagePath}" th:alt="${film.title}" ></div>
+        <div class="film-description">
+            <p th:text="${film.description}"></p>
+            <a th:href="'/home?token=' + ${token} + '&username=' + ${username}">Back to Film List</a>
+        </div>
+
+        
+    </div>
+
+    
+</div>
+
+</body>
+</html>

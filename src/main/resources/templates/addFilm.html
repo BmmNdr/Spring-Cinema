@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Movie</title>
+    <link rel="stylesheet" href="css/styles.css">
+	<script src="js/main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class=".login-container">
+    <h1>Add Movie</h1>
+    <div>
+    
+    <div class="input-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br><br>
+    </div>
+    <div class="input-group">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" cols="50" required></textarea><br><br>
+    </div>
+    <div class="input-group">
+        <label for="release_date">Release Date:</label>
+        <input type="number" min="1900" max="2024" id="release_date" name="release_date" required><br><br>
+    </div>
+    <div class="input-group">
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" name="genre" required><br><br>
+    </div>
+    <div class="input-group">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required><br><br>
+    </div>
+        <button onclick="addFilm()">Add Movie</button>
+    </div>
+    </div>
+</body>
+</html>
