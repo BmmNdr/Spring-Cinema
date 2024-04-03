@@ -1,3 +1,4 @@
+// This class represents a controller for the cinema database.
 package com.example.cinema;
 
 import java.security.NoSuchAlgorithmException;
@@ -16,6 +17,7 @@ public class DatabaseController {
     private static DatabaseController __instance = null;
     private Connection conn;
 
+    // Get the instance of the DatabaseController.
     public static DatabaseController getInstance() throws SQLException {
         if (__instance == null) {
             __instance = new DatabaseController();
@@ -28,6 +30,8 @@ public class DatabaseController {
         conn = DriverManager.getConnection("jdbc:mysql://localhost/cinema", "root", "");
     }
 
+    // Check if a user with the given username or email already exists in the
+    // database.
     public boolean checkUserExists(String username, String email) throws SQLException {
         PreparedStatement stat = conn.prepareStatement("SELECT * FROM Utenti WHERE username = ? OR email = ?");
 
@@ -45,8 +49,10 @@ public class DatabaseController {
         }
     }
 
+    // Save a new user to the database.
     public void saveNewUser(String username, String password, String email) throws SQLException {
-        PreparedStatement stat = conn.prepareStatement("INSERT INTO Utenti (username, password, email, isAdmin) VALUES (?, md5(?), ?, 0)");
+        PreparedStatement stat = conn
+                .prepareStatement("INSERT INTO Utenti (username, password, email, isAdmin) VALUES (?, md5(?), ?, 0)");
 
         stat.setString(1, username);
         stat.setString(2, password);
@@ -57,6 +63,10 @@ public class DatabaseController {
         stat.close();
     }
 
+    /**
+     * Check if the given username and password match a user in the database.
+     * If the credentials are valid, generate a session token for the user and adds it to the database.
+     */
     public String checkPassword(String username, String password) throws SQLException {
         PreparedStatement stat = conn.prepareStatement("SELECT * FROM Utenti WHERE username = ? AND password = md5(?)");
 
@@ -69,6 +79,7 @@ public class DatabaseController {
             stat.close();
             String token = generateSessionToken(username, password);
 
+            //Add the token to the database
             stat = conn.prepareStatement("UPDATE Utenti SET token = ? WHERE username = ?");
             stat.setString(1, token);
             stat.setString(2, username);
@@ -83,6 +94,7 @@ public class DatabaseController {
         }
     }
 
+    // Generate a session token for the given username and password.
     private String generateSessionToken(String username, String password) {
         // Concatenate username, password, and current time
         String input = username + password + new Date().toString();
@@ -99,7 +111,6 @@ public class DatabaseController {
             for (byte aByte : bytes) {
                 sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
             }
-            // Get complete hashed session token
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -107,6 +118,7 @@ public class DatabaseController {
         }
     }
 
+    // Get the list of films from the database, filtering by genre.
     public List<Film> getFilms(String filter) {
         List<Film> films = new ArrayList<Film>();
 
@@ -130,6 +142,7 @@ public class DatabaseController {
         return films;
     }
 
+    //Gets a single film from the database by its id
     public Film getFilmById(String id) {
         try {
             PreparedStatement stat = conn.prepareStatement("SELECT * FROM movies WHERE id = ?");
@@ -150,6 +163,7 @@ public class DatabaseController {
         return null;
     }
 
+    //Check if the given token and username match a user in the database
     public Boolean checkToken(String token, String username) throws SQLException {
 
         PreparedStatement stat = conn.prepareStatement("SELECT * FROM Utenti WHERE username = ? AND token = ?");
@@ -167,9 +181,11 @@ public class DatabaseController {
         }
     }
 
+    //Check if the given token and username match an admin user in the database
     public Boolean checkAdmin(String token, String username) throws SQLException {
 
-        PreparedStatement stat = conn.prepareStatement("SELECT * FROM Utenti WHERE username = ? AND token = ? AND isAdmin = 1");
+        PreparedStatement stat = conn
+                .prepareStatement("SELECT * FROM Utenti WHERE username = ? AND token = ? AND isAdmin = 1");
         stat.setString(1, username);
         stat.setString(2, token);
 
@@ -184,6 +200,7 @@ public class DatabaseController {
         }
     }
 
+    //Removes a film from the database by its id
     public void removeFilm(String id) {
         try {
             PreparedStatement stat = conn.prepareStatement("DELETE FROM movies WHERE id = ?");
@@ -198,16 +215,17 @@ public class DatabaseController {
         }
     }
 
+    //Adds a film to the database
     public void addFilm(String title, String description, String release_date, String genre, String imagePath) {
         try {
-            PreparedStatement stat = conn.prepareStatement("INSERT INTO movies (title, description, release_year, genre, imagePath) VALUES (?, ?, ?, ?, ?)");
+            PreparedStatement stat = conn.prepareStatement(
+                    "INSERT INTO movies (title, description, release_year, genre, imagePath) VALUES (?, ?, ?, ?, ?)");
 
             stat.setString(1, title);
             stat.setString(2, description);
             stat.setString(3, release_date);
             stat.setString(4, genre);
             stat.setString(5, imagePath);
-
 
             stat.executeUpdate();
 

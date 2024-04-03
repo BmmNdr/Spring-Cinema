@@ -14,9 +14,12 @@
 				<input type="text" id="filter" placeholder="Search genre...">
 				<button id="search" th:onclick="filter()">Search</button>
 
+				<!-- Shows the addFilm link only if user is an admin-->
 				<a th:if="${isAdmin}" th:href="'addFilm?token=' + ${token} + '&username=' + ${username}">Add Film</a>
 			</div>
 			<table class="grid"><tr><th>Poster</td><th>Title</th><th>Release Year</th><th th:if="${isAdmin}">Remove</th></tr>
+
+				<!-- Iterates through the films and displays them in a table (The list of film was added to the modle in MyWebController.films()) -->
 				<tr th:each="film : ${films}">
 					<td><img th:src="'images/' + ${film.imagePath}" class="poster"></td>
 					<td><a th:href="'film/' + ${film.id}  + '?token=' + ${token} + '&username=' + ${username}" th:text="${film.title}"></a></td>
