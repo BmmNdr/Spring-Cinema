@@ -1,13 +1,18 @@
 package com.example.cinema;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class MyRestController {
@@ -110,5 +115,18 @@ public class MyRestController {
         if(DatabaseController.getInstance().checkAdmin(token, username)){
             DatabaseController.getInstance().addFilm(title, description, release_date, genre, imagePath);
         }
+    }
+
+    @PostMapping(value = "/api/uploadPoster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void uploadPoster(@RequestParam("file") MultipartFile file) throws IOException {
+        //Get the file name
+        String fileName = file.getOriginalFilename();
+
+        //Save the file to the server
+        File newFile = new File("src\\main\\resources\\static\\images\\" + fileName);
+        newFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(newFile);
+        fos.write(file.getBytes());
+        fos.close();
     }
 }

@@ -51,7 +51,30 @@ function addFilm(){
         url: "/api/addFilm?title="+param["title"]+"&description="+param["description"]+"&imagePath="+param["imagePath"]+"&release_date="+param["release_date"]+"&genre="+param["genre"]+"&token="+param["token"]+"&username="+param["username"],
         
         success: function () {
+
+            sendPicture();
+
             window.location.href = "home?token="+param["token"]+"&username="+param["username"];
+        },
+        error: function (e) {
+            alert("Error!");
+        }
+    });
+}
+
+function sendPicture(){
+    var formData = new FormData();
+    formData.append("file", $("#image")[0].files[0]);
+
+    $.ajax({
+        url: "/api/uploadPoster",
+        type: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function () {
+            console.log("Success");
         },
         error: function (e) {
             alert("Error!");

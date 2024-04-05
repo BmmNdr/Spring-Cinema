@@ -13,8 +13,7 @@ function removeFilm(id) {
     $.ajax({
         url: "/api/removeFilm?id=" + param["id"] + "&token=" + param["token"] + "&username=" + param["username"],
         success: function () {
-            //Reloads the page
-            window.location.href = "home?token=" + param["token"] + "&username=" + param["username"];
+            loadTable();
         },
         error: function (e) {
             alert("Error!");
@@ -54,7 +53,7 @@ function loadTable() {
                 releaseYear.innerHTML = response[i].release_year;
                 genre.innerHTML = response[i].genre;
 
-                if (document.getElementById("isAdmin") == "true") {
+                if (document.getElementById("isAdmin").value === "true") {
                     var remove = row.insertCell(4);
                     remove.innerHTML = "<button onclick='removeFilm(" + response[i].id + ")' class='remove'>Remove</button>";
                 }
@@ -68,6 +67,8 @@ function loadTable() {
 
 $(document).ready(function () {
     loadTable();
+
+    //Calls the loadTable function when the user types in the filter input
     $("#filter").on("keyup", function () {
         loadTable();
     });

@@ -8,6 +8,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
 	<body>
+		<!-- https://www.w3schools.com/tags/att_input_type_hidden.asp -->
 		<input type="hidden" th:value="${isAdmin}" id="isAdmin"></input>
 
 		<div class="container">
@@ -19,6 +20,7 @@
 				<a th:if="${isAdmin}" th:href="'addFilm?token=' + ${token} + '&username=' + ${username}">Add Film</a>
 			</div>
 			<table class="grid"><tr><th>Poster</td><th>Title</th><th>Release Year</th><th>Genre</th><th th:if="${isAdmin}">Remove</th></tr>
+				<!-- The table is filled with data from the API called in the home.js script -->
 				<tbody id="table-content"></tbody>
 			</table>
 		</div>
