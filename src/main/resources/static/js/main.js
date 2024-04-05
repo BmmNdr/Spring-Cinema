@@ -29,49 +29,6 @@ function chkLogin(){
     });
 }
 
-//Used in Home.html
-function filter(){
-    var data = {}
-    data["filter"] = $("#filter").val();
-
-    //Gets the token and username from the URL (Get parameters)
-    var queryString = window.location.search;
-    var urlParams = new URLSearchParams(queryString);
-
-    data["token"] = urlParams.get('token');
-    data["username"] = urlParams.get('username');
-
-    //Reloads the page with the new filter
-    window.location.href = "home?token="+data["token"]+"&filter="+data["filter"]+"&username="+data["username"];
-
-    return true;
-}
-
-//Used in Home.html
-function removeFilm(id){
-    var param = {}
-    param["id"] = id;
-
-    //Gets the token and username from the URL (Get parameters)
-    var queryString = window.location.search;
-    var urlParams = new URLSearchParams(queryString);
-
-    param["token"] = urlParams.get('token');
-    param["username"] = urlParams.get('username');
-
-    //Calls the API to remove the film
-    $.ajax({
-        url: "/api/removeFilm?id="+param["id"]+"&token="+param["token"]+"&username="+param["username"],
-        success: function () {
-            //Reloads the page
-            window.location.href = "home?token="+param["token"]+"&username="+param["username"];
-        },
-        error: function (e) {
-            alert("Error!");
-        }
-    });
-}
-
 //Used in addFilm.html
 function addFilm(){
     var param = {}

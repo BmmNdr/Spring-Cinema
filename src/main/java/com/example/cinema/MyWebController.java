@@ -1,7 +1,6 @@
 package com.example.cinema;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,22 +37,11 @@ public class MyWebController {
     //Otherwise it will redirect to the login page.
     //The filter parameter is % by default, so it will match all the films in the SELECT WHERE LIKE statement. (Redundant default value in the REST API, just to be shure)
     @RequestMapping("/home")
-    public String home(@RequestParam(value = "token", required = false) String token, @RequestParam(value = "username", required = false) String username, @RequestParam(value = "filter", required = false, defaultValue = "%") String filter, Model model) {
+    public String home(@RequestParam(value = "token", required = false) String token, @RequestParam(value = "username", required = false) String username, Model model) {
         if (checkToken(token, username)) {
-
-            //Call the API to get the list of films
-            String apiUrl = "http://localhost:8080/api/films?token=" + token + "&filter=" + filter + "&username=" + username;
-
-            @SuppressWarnings("unchecked")
-            List<Film> items = restTemplate.getForObject(apiUrl, List.class);
-
-            //Add the films to the model, so they can be displayed in the view using Thymeleaf ("th:")
-            model.addAttribute("films", items);
-
             //I need to add token and username to the model so I can add them to the links in the page and mantain the session.
             model.addAttribute("token", token);
             model.addAttribute("username", username);
-
 
             model.addAttribute("isAdmin", checkAdmin(token, username));
 

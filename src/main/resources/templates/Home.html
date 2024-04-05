@@ -4,29 +4,25 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/home_styles.css">
-		<script src="js/main.js"></script>
+		
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	</head>
 	<body>
+		<input type="hidden" th:value="${isAdmin}" id="isAdmin"></input>
+
 		<div class="container">
 			<div class="filter-bar">
 				<label for="filter">Filter:</label>
 				<input type="text" id="filter" placeholder="Search genre...">
-				<button id="search" th:onclick="filter()">Search</button>
 
 				<!-- Shows the addFilm link only if user is an admin-->
 				<a th:if="${isAdmin}" th:href="'addFilm?token=' + ${token} + '&username=' + ${username}">Add Film</a>
 			</div>
-			<table class="grid"><tr><th>Poster</td><th>Title</th><th>Release Year</th><th th:if="${isAdmin}">Remove</th></tr>
-
-				<!-- Iterates through the films and displays them in a table (The list of film was added to the modle in MyWebController.films()) -->
-				<tr th:each="film : ${films}">
-					<td><img th:src="'images/' + ${film.imagePath}" class="poster"></td>
-					<td><a th:href="'film/' + ${film.id}  + '?token=' + ${token} + '&username=' + ${username}" th:text="${film.title}"></a></td>
-					<td th:text="${film.release_year}"></td>
-					<td th:if="${isAdmin}"><button th:onclick="'removeFilm(' + ${film.id} + ')'" class="remove">Remove</button></td>
-				</tr>
+			<table class="grid"><tr><th>Poster</td><th>Title</th><th>Release Year</th><th>Genre</th><th th:if="${isAdmin}">Remove</th></tr>
+				<tbody id="table-content"></tbody>
 			</table>
 		</div>
+
+		<script src="js/home.js"></script>
 	</body>
 </html>
