@@ -1,13 +1,15 @@
-package com.example.cinema;
+package com.example.cinema.controller;
 
 import java.sql.SQLException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+
+import com.example.cinema.entity.Film;
+
 import org.springframework.ui.Model;
 
 //Logica Utilizzata (troppo lunga e "complessa" per scrivere in inglese)
@@ -23,7 +25,6 @@ public class MyWebController {
     private final RestTemplate restTemplate;
 
     //Use to make the RestTemplate object available to the controller.
-    @Autowired
     public MyWebController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }

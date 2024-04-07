@@ -1,4 +1,4 @@
-package com.example.cinema;
+package com.example.cinema.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,26 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.cinema.entity.Film;
+import com.example.cinema.service.Service;
+
 @RestController
 public class MyRestController {
 
     @GetMapping("/api/login")
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password) throws SQLException {
-
-        JSONObject response = new JSONObject();
-
-        // Check if the password is correct. If it is, the token is returned and added to the database
-        String token = DatabaseController.getInstance().checkPassword(username, password);
-
-        //Status is true if the token is not null.
-        response.put("status", token != null);
-        response.put("token", token);
-
-        return response.toString();
+    public String APIlogin(@RequestParam("username") String username, @RequestParam("password") String password) throws SQLException {
+        return Service.getInstance().checkLogin(username, password).toString();
     }
 
     @GetMapping("/api/register")
-    public String register(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email) throws SQLException {
+    public String APIregister(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("email") String email) throws SQLException {
 
         JSONObject response = new JSONObject();
 
@@ -54,7 +47,7 @@ public class MyRestController {
     // Get the list of films from the database only if the token is valid.
     //The filter parameter is % by default, so it will match all the films in the SELECT WHERE LIKE statement.
     @GetMapping("/api/films")
-    public List<Film> films(@RequestParam(value="filter", required = false, defaultValue = "%") String filter, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
+    public List<Film> APIfilms(@RequestParam(value="filter", required = false, defaultValue = "%") String filter, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
 
         if(!DatabaseController.getInstance().checkToken(token, username))
             return null;
@@ -66,19 +59,19 @@ public class MyRestController {
 
     //Checks if the token is valid
     @GetMapping("/api/checkToken")
-    public Boolean checkToken(@RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
+    public Boolean APIcheckToken(@RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
         return DatabaseController.getInstance().checkToken(token, username);
     }
 
     //Checks if the user is an admin
     @GetMapping("/api/checkAdmin")
-    public Boolean checkAdmin(@RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
+    public Boolean APIcheckAdmin(@RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
         return DatabaseController.getInstance().checkAdmin(token, username);
     }
 
     //Gets a single film from the database by its id only if the token is valid.
     @GetMapping("/api/film")
-    public Film film(@RequestParam(value="id", required = true) String id, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
+    public Film APIfilm(@RequestParam(value="id", required = true) String id, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
 
         if(!DatabaseController.getInstance().checkToken(token, username))
             return null;
@@ -90,7 +83,7 @@ public class MyRestController {
 
     //Removes a film from the database only if user is an admin (the check token is included in the chekAdmin method)
     @GetMapping("/api/removeFilm")
-    public void removeFilm(@RequestParam(value="id", required = true) String id, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
+    public void APIremoveFilm(@RequestParam(value="id", required = true) String id, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
 
         if(DatabaseController.getInstance().checkAdmin(token, username)){
             //Get the image path of the film
@@ -110,7 +103,7 @@ public class MyRestController {
 
     //Adds a film to the database only if user is an admin
     @GetMapping("/api/addFilm")
-    public void addFilm(@RequestParam(value="imagePath", required = true) String imagePath, @RequestParam(value="genre", required = true) String genre, @RequestParam(value="title", required = true) String title, @RequestParam(value="description", required = true) String description, @RequestParam(value="release_date", required=true) String release_date, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
+    public void APIaddFilm(@RequestParam(value="imagePath", required = true) String imagePath, @RequestParam(value="genre", required = true) String genre, @RequestParam(value="title", required = true) String title, @RequestParam(value="description", required = true) String description, @RequestParam(value="release_date", required=true) String release_date, @RequestParam(value="token", required = true) String token, @RequestParam(value="username", required = true) String username) throws SQLException {
 
         if(DatabaseController.getInstance().checkAdmin(token, username)){
             DatabaseController.getInstance().addFilm(title, description, release_date, genre, imagePath);
@@ -118,7 +111,7 @@ public class MyRestController {
     }
 
     @PostMapping(value = "/api/uploadPoster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadPoster(@RequestParam("file") MultipartFile file) throws IOException {
+    public void APIuploadPoster(@RequestParam("file") MultipartFile file) throws IOException {
         //Get the file name
         String fileName = file.getOriginalFilename();
 

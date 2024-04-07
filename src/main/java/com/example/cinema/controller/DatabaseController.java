@@ -1,5 +1,5 @@
 // This class represents a controller for the cinema database.
-package com.example.cinema;
+package com.example.cinema.controller;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -12,6 +12,8 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.example.cinema.entity.Film;
 
 public class DatabaseController {
     private static DatabaseController __instance = null;
@@ -27,7 +29,7 @@ public class DatabaseController {
     }
 
     private DatabaseController() throws SQLException {
-        conn = DriverManager.getConnection("jdbc:mysql://localhost/cinema", "root", "");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost/cinemaBiemmi", "root", "");
     }
 
     // Check if a user with the given username or email already exists in the

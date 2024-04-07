@@ -1,4 +1,4 @@
-package com.example.cinema;
+package com.example.cinema.entity;
 
 import java.sql.ResultSet;
 import java.util.List;
