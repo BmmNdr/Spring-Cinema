@@ -23,6 +23,11 @@ public class SessionManager {
         HttpServletRequest r = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         Cookie c = CookieManager.getCookie_(r, name);
+
+        if (c == null) {
+            return false;
+        }
+
         String value = c.getValue();
 
         return Service.chkToken(value);

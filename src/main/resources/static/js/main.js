@@ -12,10 +12,8 @@ function chkLogin(){
             var JSON = $.parseJSON(data);
 
             if(JSON["status"]){
-                var token = JSON["token"];
-
                 //Redirects to the home page with the token and username parameters (AJAX --> WebController --> Home.html)
-                window.location.href = "/home?token="+token+"&username="+params["username"];
+                window.location.href = "/home";
             }else{
 
                 //Shows the error message
@@ -40,21 +38,15 @@ function addFilm(){
     //HTML add "C:\\fakepath\\" to the loaded image path
     param["imagePath"] = $("#image").val().split('C:\\fakepath\\').pop();
 
-    var queryString = window.location.search;
-    var urlParams = new URLSearchParams(queryString);
-
-    param["token"] = urlParams.get('token');
-    param["username"] = urlParams.get('username');
-
     //Calls the API to add the film
     $.ajax({
-        url: "/api/addFilm?title="+param["title"]+"&description="+param["description"]+"&imagePath="+param["imagePath"]+"&release_date="+param["release_date"]+"&genre="+param["genre"]+"&token="+param["token"]+"&username="+param["username"],
+        url: "/api/addFilm?title="+param["title"]+"&description="+param["description"]+"&imagePath="+param["imagePath"]+"&release_date="+param["release_date"]+"&genre="+param["genre"],
         
         success: function () {
 
             sendPicture();
 
-            window.location.href = "home?token="+param["token"]+"&username="+param["username"];
+            window.location.href = "home?";
         },
         error: function (e) {
             alert("Error!");
