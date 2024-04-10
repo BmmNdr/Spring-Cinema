@@ -6,7 +6,10 @@ function chkLogin(){
 
     //Calls the API to check if the login is correct
     $.ajax({
-        url: "/api/login?username="+params["username"]+"&password="+params["password"],
+        url: "/apilogin?username="+params["username"]+"&password="+params["password"],
+        xhrFields: {
+            withCredentials: true
+         },
         success: function (data) {
 
             var JSON = $.parseJSON(data);
@@ -40,7 +43,7 @@ function addFilm(){
 
     //Calls the API to add the film
     $.ajax({
-        url: "/api/addFilm?title="+param["title"]+"&description="+param["description"]+"&imagePath="+param["imagePath"]+"&release_date="+param["release_date"]+"&genre="+param["genre"],
+        url: "/apiaddFilm?title="+param["title"]+"&description="+param["description"]+"&imagePath="+param["imagePath"]+"&release_date="+param["release_date"]+"&genre="+param["genre"],
         
         success: function () {
 
@@ -59,7 +62,7 @@ function sendPicture(){
     formData.append("file", $("#image")[0].files[0]);
 
     $.ajax({
-        url: "/api/uploadPoster",
+        url: "/apiuploadPoster",
         type: 'POST',
         data: formData,
         cache: false,

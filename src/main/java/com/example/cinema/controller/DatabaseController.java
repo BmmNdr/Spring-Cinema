@@ -193,7 +193,7 @@ public class DatabaseController {
             return false;
 
         PreparedStatement stat = conn
-                .prepareStatement("SELECT * FROM Utenti WHERE AND token = ? AND isAdmin = 1");
+                .prepareStatement("SELECT * FROM Utenti WHERE token = ? AND isAdmin = 1");
         stat.setString(1, token);
 
         ResultSet rs = stat.executeQuery();

@@ -4,7 +4,7 @@ function removeFilm(id) {
 
     //Calls the API to remove the film
     $.ajax({
-        url: "/api/removeFilm?id=" + param["id"],
+        url: "/apiremoveFilm?id=" + param["id"],
         success: function () {
             loadTable();
         },
@@ -21,7 +21,7 @@ function loadTable() {
 
     //Calls the API to get the films
     $.ajax({
-        url: "/api/films?filter=" + data["filter"],
+        url: "/apifilms?filter=" + data["filter"],
 
         success: function (response) {
             var tbody = document.getElementById("table-content");
@@ -35,7 +35,7 @@ function loadTable() {
 
 
                 poster.innerHTML = "<img src='images/" + response[i].imagePath + "' class='poster'>";
-                title.innerHTML = response[i].title;
+                title.innerHTML = "<a href='film/" + response[i].id + "'>" + response[i].title + "</a>";
                 releaseYear.innerHTML = response[i].release_year;
                 genre.innerHTML = response[i].genre;
 

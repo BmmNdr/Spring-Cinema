@@ -26,7 +26,7 @@ function chkRegister(){
 
     //Calls the API to register the user
     $.ajax({
-        url: "/api/register?username="+data["username"]+"&password="+data["password"] + "&email="+data["email"],
+        url: "/apiregister?username="+data["username"]+"&password="+data["password"] + "&email="+data["email"],
         success: function (data) {
 
             if(data){

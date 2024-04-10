@@ -17,7 +17,10 @@
 				<input type="text" id="filter" placeholder="Search genre...">
 
 				<!-- Shows the addFilm link only if user is an admin-->
-				<a th:if="${isAdmin}" th:href="'addFilm">Add Film</a>
+				<a th:if="${isAdmin}" href="addFilm">Add Film</a>
+
+				<!-- Shows the logout link -->
+				<a href="/logout">Logout</a>
 			</div>
 			<table class="grid"><tr><th>Poster</td><th>Title</th><th>Release Year</th><th>Genre</th><th th:if="${isAdmin}">Remove</th></tr>
 				<!-- The table is filled with data from the API called in the home.js script -->

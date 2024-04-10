@@ -1,26 +1,19 @@
 package com.example.cinema.service;
 
 import jakarta.servlet.http.Cookie;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class SessionManager {
-    static public void session_start(String token) {
-        HttpServletResponse r = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-
+    static public void session_start(HttpServletResponse r, String token) {
         CookieManager.writeCookie(r, "token", token);
     }
 
-    static public void session_destroy() {
-        HttpServletResponse r = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    static public void session_destroy(HttpServletResponse r) {
         CookieManager.removeCookie(r, "token");
     }
 
-    static public Boolean session_exists(String name) {
-        HttpServletRequest r = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    static public Boolean session_exists(HttpServletRequest r, String name) {
 
         Cookie c = CookieManager.getCookie_(r, name);
 
@@ -33,8 +26,7 @@ public class SessionManager {
         return Service.chkToken(value);
     }
 
-    static public Boolean admin_session_exists(String name) {
-        HttpServletRequest r = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    static public Boolean admin_session_exists(HttpServletRequest r, String name) {
 
         Cookie c = CookieManager.getCookie_(r, name);
         String value = c.getValue();

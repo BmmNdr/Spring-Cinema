@@ -2,6 +2,9 @@ package com.example.cinema.controller;
 
 import java.sql.SQLException;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +29,10 @@ public class MyWebController {
     // SELECT WHERE LIKE statement. (Redundant default value in the REST API, just
     // to be shure)
     @RequestMapping("/home")
-    public String home(Model model) {
-        if (SessionManager.session_exists("token")) {
-            model.addAttribute("isAdmin", SessionManager.admin_session_exists("token"));
+    public String home(Model model, HttpServletRequest request) {
+
+        if (SessionManager.session_exists(request, "token")) {
+            model.addAttribute("isAdmin", SessionManager.admin_session_exists(request, "token"));
 
             return "Home";
         }
@@ -46,16 +50,23 @@ public class MyWebController {
         return "Register";
     }
 
+    @RequestMapping("/logout")
+    public String logout(HttpServletResponse request) {
+        SessionManager.session_destroy(request);
+
+        return "Login";
+    }
+
     // Film page only if the user is logged in.
     // Film id is passed as a path variable. (in the URL)
     @RequestMapping("/film/{id}")
-    public String film(@PathVariable String id, Model model) throws SQLException {
+    public String film(@PathVariable String id, Model model, HttpServletRequest request) throws SQLException {
 
-        if (!SessionManager.session_exists("token")) {
+        if (!SessionManager.session_exists(request, "token")) {
             return "Login";
         }
 
-        Film film = Service.getInstance().getFilmById(id);
+        Film film = Service.getInstance().getFilmById(request, id);
 
         model.addAttribute("film", film);
 
@@ -64,8 +75,9 @@ public class MyWebController {
 
     // Add film page only if the user is logged in and is an admin.
     @RequestMapping("/addFilm")
-    public String addFilm(Model model) {
-        if (!SessionManager.admin_session_exists("token")) {
+    public String addFilm(Model model, HttpServletRequest request) {
+
+        if (!SessionManager.admin_session_exists(request, "token")) {
             return "Login";
         }
 
