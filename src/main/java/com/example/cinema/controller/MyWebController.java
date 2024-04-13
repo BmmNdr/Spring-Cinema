@@ -2,9 +2,6 @@ package com.example.cinema.controller;
 
 import java.sql.SQLException;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +26,10 @@ public class MyWebController {
     // SELECT WHERE LIKE statement. (Redundant default value in the REST API, just
     // to be shure)
     @RequestMapping("/home")
-    public String home(Model model, HttpServletRequest request) {
+    public String home(Model model) {
 
-        if (SessionManager.session_exists(request, "token")) {
-            model.addAttribute("isAdmin", SessionManager.admin_session_exists(request, "token"));
+        if (SessionManager.session_exists()) {
+            model.addAttribute("isAdmin", SessionManager.admin_session_exists());
 
             return "Home";
         }
@@ -51,8 +48,8 @@ public class MyWebController {
     }
 
     @RequestMapping("/logout")
-    public String logout(HttpServletResponse request) {
-        SessionManager.session_destroy(request);
+    public String logout() {
+        SessionManager.session_destroy();
 
         return "Login";
     }
@@ -60,13 +57,13 @@ public class MyWebController {
     // Film page only if the user is logged in.
     // Film id is passed as a path variable. (in the URL)
     @RequestMapping("/film/{id}")
-    public String film(@PathVariable String id, Model model, HttpServletRequest request) throws SQLException {
+    public String film(@PathVariable String id, Model model) throws SQLException {
 
-        if (!SessionManager.session_exists(request, "token")) {
+        if (!SessionManager.session_exists()) {
             return "Login";
         }
 
-        Film film = Service.getInstance().getFilmById(request, id);
+        Film film = Service.getInstance().getFilmById(id);
 
         model.addAttribute("film", film);
 
@@ -75,9 +72,9 @@ public class MyWebController {
 
     // Add film page only if the user is logged in and is an admin.
     @RequestMapping("/addFilm")
-    public String addFilm(Model model, HttpServletRequest request) {
+    public String addFilm(Model model) {
 
-        if (!SessionManager.admin_session_exists(request, "token")) {
+        if (!SessionManager.admin_session_exists()) {
             return "Login";
         }
 

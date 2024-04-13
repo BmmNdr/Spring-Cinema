@@ -4,9 +4,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 import org.json.JSONObject;
 
 import com.example.cinema.controller.DatabaseController;
@@ -51,7 +48,7 @@ public class Service {
         }
     }
 
-    public JSONObject checkLogin(HttpServletResponse r, String username, String password) {
+    public JSONObject checkLogin(String username, String password) {
         JSONObject response = new JSONObject();
 
         // Check if the password is correct. If it is, the token is returned and added
@@ -61,7 +58,7 @@ public class Service {
             token = db.checkPassword(username, password);
 
             if (token != null)
-                SessionManager.session_start(r, token);
+                SessionManager.session_start(token);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error checking password!");
@@ -94,9 +91,9 @@ public class Service {
         return response;
     }
 
-    public List<Film> getFilms(HttpServletRequest r, String filter) {
+    public List<Film> getFilms(String filter) {
 
-        if (!SessionManager.session_exists(r, "token"))
+        if (!SessionManager.session_exists())
             return null;
 
         List<Film> films = db.getFilms(filter);
@@ -104,8 +101,8 @@ public class Service {
         return films;
     }
 
-    public Film getFilmById(HttpServletRequest r, String id) {
-        if (!SessionManager.session_exists(r, "token"))
+    public Film getFilmById(String id) {
+        if (!SessionManager.session_exists())
             return null;
 
         Film film = db.getFilmById(id);
@@ -113,8 +110,8 @@ public class Service {
         return film;
     }
 
-    public void removeFilm(HttpServletRequest r, String id) {
-        if (!SessionManager.admin_session_exists(r, "token"))
+    public void removeFilm(String id) {
+        if (!SessionManager.admin_session_exists())
             return;
 
         String path = db.getFilmById(id).imagePath;
@@ -130,8 +127,8 @@ public class Service {
         db.removeFilm(id);
     }
 
-    public void addFilm(HttpServletRequest r, String title, String description, String release_date, String genre, String imagePath) {
-        if (!SessionManager.admin_session_exists(r, "token"))
+    public void addFilm(String title, String description, String release_date, String genre, String imagePath) {
+        if (!SessionManager.admin_session_exists())
             return;
 
         db.addFilm(title, description, release_date, genre, imagePath);

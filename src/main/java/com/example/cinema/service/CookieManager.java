@@ -1,12 +1,16 @@
 package com.example.cinema.service;
 
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class CookieManager {
 
-    static public void writeCookie(HttpServletResponse response, String name, String value) {
+    static public void writeCookie(String name, String value) {
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         // create a cookie
         Cookie cookie = new Cookie(name, value);
 
@@ -14,7 +18,8 @@ public class CookieManager {
         response.addCookie(cookie);
     }
 
-    static public void writeCookie(HttpServletResponse response, String name, String value, int setMaxAge) {
+    static public void writeCookie(String name, String value, int setMaxAge) {
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         // create a cookie
         Cookie cookie = new Cookie(name, value);
 
@@ -24,10 +29,9 @@ public class CookieManager {
         response.addCookie(cookie);
     }
 
-    static public String readCookie(HttpServletRequest request, String name) {
-
+    static public String readCookie(String name) {
         // add cookie to response
-        Cookie c = getCookie_(request, name);
+        Cookie c = getCookie_(name);
         if (c == null) {
             return "Cookie non settato!";
         } else {
@@ -36,9 +40,10 @@ public class CookieManager {
     }
 
 
-    static public Cookie getCookie_(HttpServletRequest r, String name) {
+    static public Cookie getCookie_(String name) {
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 
-        Cookie[] cookies = r.getCookies();
+        Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
                 if (cookies[i].getName().equals(name))
@@ -50,9 +55,11 @@ public class CookieManager {
 
     // per rimuovere un cookie, occorre settare il campo "MaxAge" a 0, in modo da
     // farlo scadere ed il browser lo cancellerà
-    static public void removeCookie(HttpServletResponse request, String name) {
+    static public void removeCookie(String name) {
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+
         Cookie c = new Cookie(name, null);
         c.setMaxAge(0);
-        request.addCookie(c);
+        response.addCookie(c);
     }
 }
