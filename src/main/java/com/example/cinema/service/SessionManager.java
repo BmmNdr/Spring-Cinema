@@ -1,34 +1,55 @@
 package com.example.cinema.service;
 
-import jakarta.servlet.http.Cookie;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import jakarta.servlet.http.HttpSession;
 
 public class SessionManager {
-    static public void session_start(String token) {
-        CookieManager.writeCookie("token", token);
+    static public void session_start(String token, Boolean isAdmin) {
+        HttpSession s = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+        
+        s.setAttribute("token", token);
+        s.setAttribute("isAdmin", isAdmin);
+
+        //CookieManager.writeCookie("token", token);
     }
 
     static public void session_destroy() {
-        CookieManager.removeCookie("token");
+
+        HttpSession s = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession();
+
+        s.invalidate();
+
+        //CookieManager.removeCookie("token");
     }
 
     static public Boolean session_exists() {
+        HttpSession s = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession();
 
-        Cookie c = CookieManager.getCookie_("token");
+        String token =(String)s.getAttribute("token");
 
-        if (c == null) {
-            return false;
-        }
+        return !(token == null);
 
-        String value = c.getValue();
 
-        return Service.chkToken(value);
+        //Cookie c = CookieManager.getCookie_("token");
+        //if (c == null) {
+        //    return false;
+        //}
+        //String value = c.getValue();
+        //return Service.chkToken(value);
     }
 
     static public Boolean admin_session_exists() {
 
-        Cookie c = CookieManager.getCookie_("token");
-        String value = c.getValue();
+        HttpSession s = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession();
 
-        return Service.chkAdmin(value);
+        Boolean isAdmin =(Boolean)s.getAttribute("isAdmin");
+
+        if (isAdmin == null) {
+            return false;
+        }
+
+        return isAdmin;
     }
 }

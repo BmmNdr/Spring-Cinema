@@ -32,17 +32,9 @@ public class Service {
         }
     }
 
-    public static Boolean chkToken(String token) {
+    public static Boolean chkAdmin(String username) {
         try {
-            return DatabaseController.getInstance().checkToken(token);
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    public static Boolean chkAdmin(String token) {
-        try {
-            return DatabaseController.getInstance().checkAdmin(token);
+            return DatabaseController.getInstance().checkAdmin(username);
         } catch (SQLException e) {
             return false;
         }
@@ -56,9 +48,10 @@ public class Service {
         String token = null;
         try {
             token = db.checkPassword(username, password);
+            Boolean isAdmin = chkAdmin(username); 
 
             if (token != null)
-                SessionManager.session_start(token);
+                SessionManager.session_start(token, isAdmin);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error checking password!");

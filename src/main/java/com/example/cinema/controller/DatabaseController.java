@@ -80,17 +80,7 @@ public class DatabaseController {
 
         if (rs.next()) {
             stat.close();
-            String token = generateSessionToken(username, password);
-
-            // Add the token to the database
-            stat = conn.prepareStatement("UPDATE Utenti SET token = ? WHERE username = ?");
-            stat.setString(1, token);
-            stat.setString(2, username);
-
-            stat.executeUpdate();
-
-            stat.close();
-            return token;
+            return generateSessionToken(username, password);
         } else {
             stat.close();
             return null;
@@ -187,14 +177,14 @@ public class DatabaseController {
     }
 
     // Check if the given token and username match an admin user in the database
-    public Boolean checkAdmin(String token) throws SQLException {
+    public Boolean checkAdmin(String username) throws SQLException {
 
-        if (token == null)
+        if (username == null)
             return false;
 
         PreparedStatement stat = conn
-                .prepareStatement("SELECT * FROM Utenti WHERE token = ? AND isAdmin = 1");
-        stat.setString(1, token);
+                .prepareStatement("SELECT * FROM Utenti WHERE username = ? AND isAdmin = 1");
+        stat.setString(1, username);
 
         ResultSet rs = stat.executeQuery();
 
