@@ -46,8 +46,7 @@ public class MyRestController {
         return Service.getInstance().getFilmById(id);
     }
 
-    // Removes a film from the database only if user is an admin (the check token is
-    // included in the chekAdmin method)
+    // Removes a film from the database only if user is an admin
     @GetMapping("/apiremoveFilm")
     public void APIremoveFilm(@RequestParam(value = "id", required = true) String id) {
 
@@ -65,6 +64,8 @@ public class MyRestController {
         Service.getInstance().addFilm(title, description, release_date, genre, imagePath);
     }
 
+    // Uploads an image to the server.
+    // Only accessible by admin after addFilm.
     @PostMapping(value = "/apiuploadPoster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void APIuploadPoster(@RequestParam("file") MultipartFile file) throws IOException {
         // Get the file name

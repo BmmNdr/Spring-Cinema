@@ -7,10 +7,12 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+//Not Use, only for example if you don't want to use the session
 public class CookieManager {
 
     static public void writeCookie(String name, String value) {
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getResponse();
         // create a cookie
         Cookie cookie = new Cookie(name, value);
 
@@ -19,7 +21,8 @@ public class CookieManager {
     }
 
     static public void writeCookie(String name, String value, int setMaxAge) {
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getResponse();
         // create a cookie
         Cookie cookie = new Cookie(name, value);
 
@@ -39,9 +42,9 @@ public class CookieManager {
         }
     }
 
-
     static public Cookie getCookie_(String name) {
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getRequest();
 
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -56,7 +59,8 @@ public class CookieManager {
     // per rimuovere un cookie, occorre settare il campo "MaxAge" a 0, in modo da
     // farlo scadere ed il browser lo cancellerà
     static public void removeCookie(String name) {
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .getResponse();
 
         Cookie c = new Cookie(name, null);
         c.setMaxAge(0);

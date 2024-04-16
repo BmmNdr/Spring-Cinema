@@ -16,15 +16,18 @@ import org.springframework.ui.Model;
 public class MyWebController {
 
     @RequestMapping("/")
-    public String landing() {
+    public String landing(Model model) {
+        if (SessionManager.session_exists()) {
+            model.addAttribute("isAdmin", SessionManager.admin_session_exists());
+
+            return "Home";
+        }
+
         return "Login";
     }
 
     // Home page only if the user is logged in.
     // Otherwise it will redirect to the login page.
-    // The filter parameter is % by default, so it will match all the films in the
-    // SELECT WHERE LIKE statement. (Redundant default value in the REST API, just
-    // to be shure)
     @RequestMapping("/home")
     public String home(Model model) {
 

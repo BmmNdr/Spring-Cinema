@@ -19,6 +19,8 @@ public class DatabaseController {
     private static DatabaseController __instance = null;
     private Connection conn;
 
+    private static String dbName = "cinemaBiemmi";
+
     // Get the instance of the DatabaseController.
     public static DatabaseController getInstance() throws SQLException {
         if (__instance == null) {
@@ -29,7 +31,7 @@ public class DatabaseController {
     }
 
     private DatabaseController() throws SQLException {
-        conn = DriverManager.getConnection("jdbc:mysql://localhost/cinemaBiemmi", "root", "");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, "root", "");
     }
 
     // Check if a user with the given username or email already exists in the
@@ -67,8 +69,7 @@ public class DatabaseController {
 
     /**
      * Check if the given username and password match a user in the database.
-     * If the credentials are valid, generate a session token for the user and adds
-     * it to the database.
+     * If the credentials are valid, generate a session token for the user.
      */
     public String checkPassword(String username, String password) throws SQLException {
         PreparedStatement stat = conn.prepareStatement("SELECT * FROM Utenti WHERE username = ? AND password = md5(?)");
